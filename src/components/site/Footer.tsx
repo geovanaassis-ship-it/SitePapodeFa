@@ -93,7 +93,7 @@ function FooterGroup({ title, items }: { title: string; items: NavSection[] }) {
       <ul className="mt-3 flex flex-col gap-2">
         {items.map((item) => (
           <li key={item.slug}>
-            <Link href={`/${item.slug}`} className="font-label text-[12px] normal-case text-paper/85 hover:text-paper">
+            <Link href={`/${item.slug}`} className="font-mono text-[12px] text-paper/85 hover:text-paper">
               {item.label}
             </Link>
           </li>
