@@ -37,21 +37,43 @@ async function main() {
     },
   });
 
-  // Atualização pontual da logo — remover este bloco depois de aplicado.
+  // Atualização pontual: fotos dos eventos da Linha do Tempo — remover depois de aplicado.
   {
-    const logoPath = path.join(process.cwd(), "prisma", "assets", "logo-papo-de-fa.jpg");
-    const logoBuffer = await readFile(logoPath);
-    const logoBlob = await put("logo-papo-de-fa.jpg", logoBuffer, {
-      access: "public",
-      addRandomSuffix: true,
-      contentType: "image/jpeg",
-    });
-    await prisma.siteSettings.upsert({
-      where: { id: "singleton" },
-      update: { logoUrl: logoBlob.url },
-      create: { id: "singleton", logoUrl: logoBlob.url },
-    });
-    console.log(`Logo atualizada: ${logoBlob.url}`);
+    const timelinePhotos: { order: number; file: string }[] = [
+      { order: 1, file: "01-lisztomania.png" },
+      { order: 2, file: "02-palavra-fa.png" },
+      { order: 3, file: "03-comunidades-literarias.png" },
+      { order: 4, file: "04-palavra-fandom.png" },
+      { order: 5, file: "05-ficcao-cientifica.png" },
+      { order: 6, file: "06-discos-radio-tv.png" },
+      { order: 7, file: "07-cultura-geek.png" },
+      { order: 8, file: "08-games-locadoras-rock.png" },
+      { order: 9, file: "09-fas-internet.png" },
+      { order: 10, file: "10-divas-pop-orkut.png" },
+      { order: 11, file: "11-redes-sociais.png" },
+      { order: 12, file: "12-pandemia-kpop.png" },
+    ];
+
+    for (const photo of timelinePhotos) {
+      const filePath = path.join(process.cwd(), "prisma", "assets", "linha-do-tempo", photo.file);
+      const buffer = await readFile(filePath);
+      const blob = await put(`linha-do-tempo/${photo.file}`, buffer, {
+        access: "public",
+        addRandomSuffix: true,
+        contentType: "image/png",
+      });
+
+      const { count } = await prisma.timelineEvent.updateMany({
+        where: { order: photo.order },
+        data: { imageUrl: blob.url },
+      });
+
+      console.log(
+        count > 0
+          ? `Imagem do evento #${photo.order} atualizada: ${blob.url}`
+          : `Nenhum evento com order=${photo.order} encontrado — imagem não aplicada (importe a linha do tempo histórica no painel primeiro).`,
+      );
+    }
   }
 
   await prisma.siteSettings.upsert({
