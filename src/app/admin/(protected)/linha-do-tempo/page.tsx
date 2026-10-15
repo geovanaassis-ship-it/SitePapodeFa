@@ -2,14 +2,14 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { DeleteButton } from "@/components/admin/DeleteButton";
-import { deleteTimelineEventAction } from "./actions";
+import { deleteTimelineEventAction, importHistoricalTimelineAction } from "./actions";
 
 export default async function TimelineListPage({
   searchParams,
 }: {
-  searchParams: Promise<{ criado?: string; salvo?: string }>;
+  searchParams: Promise<{ criado?: string; salvo?: string; importado?: string }>;
 }) {
-  const { criado, salvo } = await searchParams;
+  const { criado, salvo, importado } = await searchParams;
   const events = await prisma.timelineEvent.findMany({ orderBy: [{ order: "asc" }, { eventDate: "asc" }] });
 
   return (
@@ -27,11 +27,30 @@ export default async function TimelineListPage({
         </Link>
       </div>
 
-      {(criado || salvo) && (
+      {(criado || salvo || importado) && (
         <p className="font-label mt-6 inline-block rounded-full bg-teal/10 px-4 py-2 text-[11px] text-teal">
-          {criado ? "Evento criado com sucesso." : "Evento atualizado com sucesso."}
+          {criado
+            ? "Evento criado com sucesso."
+            : salvo
+              ? "Evento atualizado com sucesso."
+              : "Linha do tempo histórica importada com sucesso."}
         </p>
       )}
+
+      <div className="mt-6 rounded-2xl border border-ink/10 bg-paper p-5">
+        <p className="font-medium">Importar linha do tempo histórica (Evolução dos Fandoms)</p>
+        <p className="mt-1 text-sm text-ink/60">
+          Substitui todos os eventos abaixo pelos 12 marcos históricos da pesquisa (1844–2020).
+          Use apenas uma vez — essa ação apaga os eventos atuais e não pode ser desfeita.
+        </p>
+        <div className="mt-3">
+          <DeleteButton
+            action={importHistoricalTimelineAction}
+            confirmMessage="Isso vai apagar todos os eventos atuais da linha do tempo e substituí-los pelos 12 marcos históricos (1844–2020). Continuar?"
+            label="Importar 12 eventos históricos"
+          />
+        </div>
+      </div>
 
       <div className="mt-8 divide-y divide-ink/10 rounded-2xl border border-ink/10 bg-paper">
         {events.length === 0 && (

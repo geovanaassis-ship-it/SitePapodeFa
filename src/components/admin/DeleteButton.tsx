@@ -3,9 +3,11 @@
 export function DeleteButton({
   action,
   confirmMessage = "Tem certeza que deseja excluir? Essa ação não pode ser desfeita.",
+  label = "Excluir",
 }: {
   action: () => Promise<void>;
   confirmMessage?: string;
+  label?: string;
 }) {
   return (
     <form
@@ -20,7 +22,7 @@ export function DeleteButton({
         type="submit"
         className="font-label rounded-full border border-wine/30 px-4 py-2 text-[11px] text-wine hover:bg-wine/10"
       >
-        Excluir
+        {label}
       </button>
     </form>
   );
