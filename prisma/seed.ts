@@ -7,7 +7,8 @@ const prisma = new PrismaClient();
 const ADMIN_EMAIL = "equipe@papodefa.com.br";
 
 // Gerada aleatoriamente a cada execução — nunca fica gravada no código-fonte
-// (este arquivo é público no repositório).
+// (este arquivo é público no repositório). Só é usada na criação do primeiro
+// usuário; se ele já existir, a senha dele não é alterada por aqui.
 const ADMIN_PASSWORD = crypto.randomBytes(12).toString("base64url");
 
 async function main() {
@@ -16,7 +17,7 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: ADMIN_EMAIL },
-    update: { passwordHash },
+    update: {},
     create: {
       name: "Equipe Papo de Fã",
       email: ADMIN_EMAIL,
@@ -228,12 +229,12 @@ async function main() {
   }
 
   console.log("Seed concluído.");
-  console.log(
-    existingAdmin
-      ? `Senha do usuário admin redefinida: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`
-      : `Usuário admin criado: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`,
-  );
-  console.log("Guarde essa senha agora — ela só aparece aqui, uma vez, e não fica no código-fonte.");
+  if (existingAdmin) {
+    console.log(`Usuário admin já existia (${ADMIN_EMAIL}) — senha não foi alterada.`);
+  } else {
+    console.log(`Usuário admin criado: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+    console.log("Guarde essa senha agora — ela só aparece aqui, uma vez, e não fica no código-fonte.");
+  }
 }
 
 main()
