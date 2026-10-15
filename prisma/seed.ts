@@ -15,13 +15,21 @@ async function main() {
   const existingAdmin = await prisma.user.findUnique({ where: { email: ADMIN_EMAIL } });
   const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
 
+  // Se a variável de ambiente ADMIN_RESET_PASSWORD estiver definida no projeto
+  // Vercel, usa o valor dela para (re)definir a senha do usuário admin nesta
+  // execução. É um mecanismo manual de reset: a equipe define a variável,
+  // roda o deploy, confirma o login, e então remove a variável. O valor
+  // nunca é lido pelo Claude nem fica gravado no código-fonte.
+  const resetPassword = process.env.ADMIN_RESET_PASSWORD;
+  const resetPasswordHash = resetPassword ? await bcrypt.hash(resetPassword, 10) : null;
+
   await prisma.user.upsert({
     where: { email: ADMIN_EMAIL },
-    update: {},
+    update: resetPasswordHash ? { passwordHash: resetPasswordHash } : {},
     create: {
       name: "Equipe Papo de Fã",
       email: ADMIN_EMAIL,
-      passwordHash,
+      passwordHash: resetPasswordHash ?? passwordHash,
       role: "ADMIN",
     },
   });
@@ -229,7 +237,12 @@ async function main() {
   }
 
   console.log("Seed concluído.");
-  if (existingAdmin) {
+  if (resetPasswordHash) {
+    console.log(
+      `Senha do usuário admin (${ADMIN_EMAIL}) definida a partir da variável ADMIN_RESET_PASSWORD.`,
+    );
+    console.log("Remova essa variável de ambiente do projeto agora que a senha foi aplicada.");
+  } else if (existingAdmin) {
     console.log(`Usuário admin já existia (${ADMIN_EMAIL}) — senha não foi alterada.`);
   } else {
     console.log(`Usuário admin criado: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
