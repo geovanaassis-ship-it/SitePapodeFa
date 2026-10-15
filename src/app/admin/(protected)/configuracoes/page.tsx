@@ -61,14 +61,29 @@ export default async function ConfiguracoesPage({
         </FieldGroup>
 
         <h2 className="mt-4 font-display text-lg font-bold">Textos institucionais</h2>
-        <FieldGroup label="Título da seção 'Sobre o projeto' (home)">
+        <FieldGroup
+          label="Título da seção de apresentação (home)"
+          hint="Ex.: 'Sobre o projeto', 'Origem e definição do termo', etc."
+        >
           <TextInput name="introTitle" defaultValue={settings.introTitle} />
         </FieldGroup>
-        <FieldGroup label="Texto de apresentação do projeto (home)">
-          <TextArea name="introText" defaultValue={settings.introText} rows={4} />
+        <FieldGroup
+          label="Texto de apresentação do projeto (home)"
+          hint="Aceita **negrito**, *itálico*, ## subtítulo, - listas e parágrafos separados por linha em branco."
+        >
+          <TextArea name="introText" defaultValue={settings.introText} rows={6} />
         </FieldGroup>
-        <FieldGroup label="Texto da página 'Sobre Nós'">
+        <FieldGroup
+          label="Texto da página 'Sobre Nós'"
+          hint="Aceita **negrito**, *itálico*, ## subtítulo, - listas e parágrafos separados por linha em branco."
+        >
           <TextArea name="aboutText" defaultValue={settings.aboutText} rows={4} />
+        </FieldGroup>
+        <FieldGroup
+          label="Texto de introdução do Mapa Interativo"
+          hint="Aparece no topo da página Mapa Interativo, antes do mapa. Aceita **negrito**, *itálico*, ## subtítulo, - listas e parágrafos separados por linha em branco. Deixe em branco para usar o texto padrão."
+        >
+          <TextArea name="mapaIntroText" defaultValue={settings.mapaIntroText ?? ""} rows={6} />
         </FieldGroup>
         <FieldGroup label="Texto do rodapé">
           <TextArea name="footerText" defaultValue={settings.footerText} rows={2} />

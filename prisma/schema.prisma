@@ -39,6 +39,7 @@ model SiteSettings {
   introTitle    String   @default("Sobre o projeto")
   introText     String   @default("Reportagem multimídia que investiga como fãs constroem redes de pertencimento, criatividade e resistência a partir daquilo que amam.")
   aboutText     String   @default("Somos um grupo de estudantes e pesquisadores interessados em entender a cultura fandom a partir de histórias reais.")
+  mapaIntroText String?
   footerText    String   @default("Um projeto editorial universitário sobre cultura fandom.")
   contactEmail  String?
   instagramUrl  String?

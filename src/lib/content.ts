@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS = {
   introTitle: "Sobre o projeto",
   introText: "Edite esta apresentação no painel administrativo.",
   aboutText: "Edite o texto da equipe no painel administrativo.",
+  mapaIntroText: null,
   footerText: "Um projeto editorial universitário sobre cultura fandom.",
   contactEmail: null,
   instagramUrl: null,
