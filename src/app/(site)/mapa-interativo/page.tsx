@@ -60,6 +60,23 @@ export default async function MapaPage() {
       </div>
 
       <div className="mx-auto mt-10 h-[70vh] max-w-6xl overflow-hidden rounded-2xl border border-ink/10 px-0 sm:px-8">
+        <iframe
+          src="https://uploads.knightlab.com/storymapjs/65c98a894216fa0e954fb75e5a2245b7/maiores-fandoms-ao-redor-do-mundo/draft.html"
+          title="Maiores fandoms ao redor do mundo"
+          className="h-full w-full border-0"
+          allowFullScreen
+        />
+      </div>
+
+      <div className="mx-auto mt-20 max-w-4xl px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Geografia da reportagem"
+          title="Lugares da reportagem"
+          description="Os lugares que atravessam esta história — de encontros de fãs a bastidores de eventos."
+        />
+      </div>
+
+      <div className="mx-auto mt-10 h-[70vh] max-w-6xl overflow-hidden rounded-2xl border border-ink/10 px-0 sm:px-8">
         <MapLoader
           points={points.map((p) => ({
             id: p.id,

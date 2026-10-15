@@ -13,9 +13,21 @@ export default async function TimelinePage() {
     <div className="mx-auto max-w-4xl px-5 py-16 sm:px-8">
       <SectionHeading
         eyebrow="Linha do Tempo"
-        title="Como a reportagem aconteceu"
+        title="Evolução dos Fandoms"
         description="Os principais marcos da pesquisa, das entrevistas e da produção deste projeto."
       />
+
+      <div className="mt-8 max-w-2xl space-y-4 text-ink/75 leading-relaxed">
+        <p>
+          Com o avanço da tecnologia e da internet, o fandom se consolidou em comunidades digitais,
+          mas o fenômeno de se tornar fã de algo ou alguém é muito mais antigo do que parece. Desde o
+          século XIX, quando plateias inteiras desmaiavam diante de um pianista, até os fandoms
+          globais organizados em hashtags e campanhas, o modo como nos relacionamos com aquilo que
+          amamos foi mudando — mas o afeto, a identidade e o senso de comunidade sempre estiveram no
+          centro dessa história.
+        </p>
+        <p>Confira abaixo como essa cultura foi se transformando ao longo do tempo:</p>
+      </div>
 
       {events.length === 0 ? (
         <p className="font-label mt-10 text-sm text-ink/50">
@@ -26,7 +38,9 @@ export default async function TimelinePage() {
           {events.map((event) => (
             <li key={event.id} className="relative mb-14 last:mb-0">
               <span className="absolute -left-[41px] top-1 h-4 w-4 rounded-full border-2 border-sand bg-wine" />
-              <p className="font-label text-[12px] text-wine">{formatDate(event.eventDate)}</p>
+              <p className="font-label text-[12px] text-wine">
+                {formatDate(event.eventDate, { year: "numeric" })}
+              </p>
               <h2 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{event.title}</h2>
               {event.description && (
                 <p className="mt-3 max-w-2xl text-ink/70 leading-relaxed">{event.description}</p>

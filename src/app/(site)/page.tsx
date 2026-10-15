@@ -167,7 +167,9 @@ export default async function HomePage() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {timelinePreview.map((event) => (
             <div key={event.id} className="rounded-2xl border border-ink/10 bg-paper p-6">
-              <p className="font-label text-[11px] text-wine">{formatDate(event.eventDate)}</p>
+              <p className="font-label text-[11px] text-wine">
+                {formatDate(event.eventDate, { year: "numeric" })}
+              </p>
               <h3 className="mt-3 font-display text-xl">{event.title}</h3>
               {event.description && (
                 <p className="mt-2 line-clamp-3 text-sm text-ink/65">{event.description}</p>
