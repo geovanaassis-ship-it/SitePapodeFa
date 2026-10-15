@@ -36,13 +36,14 @@ npm run dev
 Abra [http://localhost:3000](http://localhost:3000) para o site e
 [http://localhost:3000/admin/login](http://localhost:3000/admin/login) para o painel.
 
-**Login de exemplo criado pelo seed:**
+O script de seed cria um usuário administrativo inicial (`equipe@papodefa.com.br`) com uma
+senha **gerada aleatoriamente a cada execução** e impressa uma única vez no terminal (ou nos
+logs de build, em produção) — ela nunca fica gravada no código-fonte, porque este repositório
+é público.
 
-- E-mail: `equipe@papodefa.com.br`
-- Senha: `papodefa2024`
-
-> Troque essa senha (ou crie novos usuários e remova este) assim que possível, em
-> **Painel → Usuários do painel**.
+> ⚠️ **Antes de divulgar o link do site publicado:** entre no painel com o usuário inicial
+> (pegue a senha nos logs de build da Vercel, se ainda não a tiver), crie um novo usuário com
+> e-mail e senha próprios em **Painel → Usuários do painel**, e remova o usuário de exemplo.
 
 ## Como a equipe publica conteúdo (sem programar)
 

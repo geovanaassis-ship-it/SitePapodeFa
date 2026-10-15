@@ -1,12 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
 
 const ADMIN_EMAIL = "equipe@papodefa.com.br";
-const ADMIN_PASSWORD = "papodefa2024";
+
+// Gerada aleatoriamente a cada execução — nunca fica gravada no código-fonte
+// (este arquivo é público no repositório). Só é usada na criação do primeiro
+// usuário; se ele já existir, a senha dele não é alterada por aqui.
+const ADMIN_PASSWORD = crypto.randomBytes(12).toString("base64url");
 
 async function main() {
+  const existingAdmin = await prisma.user.findUnique({ where: { email: ADMIN_EMAIL } });
   const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
 
   await prisma.user.upsert({
@@ -223,7 +229,12 @@ async function main() {
   }
 
   console.log("Seed concluído.");
-  console.log(`Login do painel: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+  if (existingAdmin) {
+    console.log(`Usuário admin já existia (${ADMIN_EMAIL}) — senha não foi alterada.`);
+  } else {
+    console.log(`Usuário admin criado: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+    console.log("Guarde essa senha agora — ela só aparece aqui, uma vez, e não fica no código-fonte.");
+  }
 }
 
 main()
