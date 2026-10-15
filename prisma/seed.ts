@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { put } from "@vercel/blob";
+import { readFile } from "fs/promises";
+import path from "path";
 
 const prisma = new PrismaClient();
 
@@ -33,6 +36,23 @@ async function main() {
       role: "ADMIN",
     },
   });
+
+  // Atualização pontual da logo — remover este bloco depois de aplicado.
+  {
+    const logoPath = path.join(process.cwd(), "prisma", "assets", "logo-papo-de-fa.jpg");
+    const logoBuffer = await readFile(logoPath);
+    const logoBlob = await put("logo-papo-de-fa.jpg", logoBuffer, {
+      access: "public",
+      addRandomSuffix: true,
+      contentType: "image/jpeg",
+    });
+    await prisma.siteSettings.upsert({
+      where: { id: "singleton" },
+      update: { logoUrl: logoBlob.url },
+      create: { id: "singleton", logoUrl: logoBlob.url },
+    });
+    console.log(`Logo atualizada: ${logoBlob.url}`);
+  }
 
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
