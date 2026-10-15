@@ -14,10 +14,11 @@ export default async function ConfiguracoesPage({
 
   return (
     <div>
-      <p className="font-label text-[11px] text-wine">Configurações</p>
-      <h1 className="mt-2 font-display text-3xl font-bold">Identidade e textos do site</h1>
+      <p className="font-label text-[11px] text-wine">Página Inicial</p>
+      <h1 className="mt-2 font-display text-3xl font-bold">Página Inicial e identidade do site</h1>
       <p className="mt-3 max-w-xl text-ink/65">
-        Logo, imagem de destaque, textos institucionais e redes sociais exibidos em todo o site.
+        Logo, imagem de destaque e textos da home — além de textos institucionais e redes
+        sociais que também aparecem no rodapé de todas as páginas.
       </p>
 
       {salvo && (

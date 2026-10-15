@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const LINKS = [
   { href: "/admin", label: "Painel", exact: true },
-  { href: "/admin/configuracoes", label: "Configurações do site" },
+  { href: "/admin/configuracoes", label: "Página Inicial" },
   { href: "/admin/secoes", label: "Perfis, Vídeos e Áudios" },
   { href: "/admin/linha-do-tempo", label: "Linha do Tempo" },
   { href: "/admin/mapa", label: "Mapa Interativo" },

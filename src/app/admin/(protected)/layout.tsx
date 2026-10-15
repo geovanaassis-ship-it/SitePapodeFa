@@ -51,7 +51,7 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
           <div className="scrollbar-thin flex gap-2 overflow-x-auto px-5 pb-3">
             {[
               ["/admin", "Painel"],
-              ["/admin/configuracoes", "Config."],
+              ["/admin/configuracoes", "Início"],
               ["/admin/secoes", "Conteúdos"],
               ["/admin/linha-do-tempo", "Linha do Tempo"],
               ["/admin/mapa", "Mapa"],
