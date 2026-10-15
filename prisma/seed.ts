@@ -150,6 +150,27 @@ async function main() {
     });
   }
 
+  // Atualização pontual de conteúdo (Vídeo 1) — remover este bloco depois de aplicado.
+  await prisma.sectionPage.update({
+    where: { slug: "video-1" },
+    data: {
+      title: "Diferença de Tratamento entre Homens e Mulheres sendo Fãs de Futebol",
+      subtitle:
+        "Torcedoras e profissionais do jornalismo esportivo ainda enfrentam julgamentos que vão além do futebol",
+      excerpt:
+        "Pintar o rosto, vestir a camisa e gritar nas arquibancadas não bastam: para muitas mulheres, ser torcedora ainda significa provar que pertence a esse universo.",
+      body: [
+        "Pintar o rosto, vestir a camisa do time, gritar nas arquibancadas e acompanhar cada lance são formas de demonstrar paixão pelo futebol. Mas, para muitas mulheres, ser torcedora ainda significa enfrentar questionamentos sobre seus conhecimentos e sua legitimidade em um universo historicamente masculino. Essa realidade também se manifesta no jornalismo esportivo, onde profissionais precisam lidar com julgamentos que ultrapassam suas competências e atingem seu gênero.",
+        "O estudo *Mulheres torcedoras de futebol no Brasil: refazendo gênero no interior da cultura fanática*, publicado em 2022 por Mariana Zuaneti Martins, Gabriela Borel Delarmelina e Kerzia Railane Silva, na revista FuLiA/UFMG, analisa a experiência de 37 torcedoras brasileiras e aborda como elas constroem suas identidades como fãs diante das barreiras de gênero. Em entrevista, Mariana explica que essas mulheres frequentemente precisam demonstrar conhecimento sobre regras, jogadores e história dos clubes para serem reconhecidas como torcedoras legítimas. Até mesmo suas roupas e a maneira como expressam a paixão pelo time podem ser utilizadas para questionar seu pertencimento ao futebol.",
+        "Essa desigualdade também aparece nos estádios. Mulheres que demonstram entusiasmo podem ser chamadas de exageradas ou histéricas, enquanto comportamentos semelhantes entre homens são interpretados como manifestações de paixão. A falta de segurança, a sensação de não pertencimento e as dificuldades relacionadas à participação feminina nas torcidas reforçam esses obstáculos. Uma pesquisa realizada em abril de 2024 pela W.Lab, em parceria com Ideia, Locomotiva e Pinion, ouviu 1.053 mulheres. Segundo os dados divulgados, apenas uma em cada três frequentava estádios e, entre as que não frequentavam, 40% apontaram a falta de segurança como um dos motivos.",
+        "No jornalismo esportivo, os questionamentos assumem outras formas. Rafaela Carolina, profissional de comunicação e comentarista esportiva com mais de seis anos de experiência na área, relata que mulheres costumam ser mais cobradas do que homens. Segundo ela, enquanto erros masculinos podem ser relativizados, falhas cometidas por mulheres podem comprometer sua credibilidade profissional. Rafaela também conta que, após discordar de sua análise durante uma transmissão, um espectador mandou que ela fosse \"lavar a louça\". O episódio evidencia como o machismo pode transformar uma discussão sobre futebol em um ataque pessoal, ultrapassando os limites da crítica profissional.",
+        "A resistência a esse cenário também acontece por meio da organização coletiva e de iniciativas de conscientização. Os coletivos de torcedoras contribuem para criar espaços de acolhimento, compartilhar experiências e fortalecer a presença feminina nos estádios. Outra iniciativa é a campanha #RespeitaAsMinas, lançada pelo Corinthians em 2018 para combater o assédio e a violência contra as mulheres. Com mensagens nos uniformes e ações de conscientização na Arena Corinthians, o clube utilizou sua visibilidade para colocar o respeito às mulheres em pauta. A campanha representa um exemplo de mobilização, embora sua realização, por si só, não comprove uma redução do machismo ou do assédio.",
+        "Para Rafaela, ocupar o esporte é também uma forma de resistência. Ela incentiva as mulheres a continuarem acompanhando seus times e buscando espaço no jornalismo, independentemente das roupas, da maquiagem ou da maneira como expressam sua paixão. As experiências relatadas por Rafaela e as reflexões de Mariana mostram que a desigualdade não se limita às arquibancadas ou aos ambientes profissionais: ela envolve padrões sociais que colocam em dúvida a capacidade, o conhecimento e o direito das mulheres de participar desse universo.",
+        "Mais do que conquistar espaço, as mulheres reivindicam o direito de torcer, trabalhar e ocupar o futebol sem precisar provar constantemente que pertencem a ele. Seja nas arquibancadas, nos coletivos de torcedoras ou nas transmissões esportivas, a paixão pelo futebol não deveria ser medida pelo gênero, mas reconhecida como uma experiência que pertence a todos.",
+      ].join("\n\n"),
+    },
+  });
+
   const timelineEvents = [
     {
       eventDate: new Date("2023-03-01"),
