@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/* -----------------------------------------------------------------
+   Identidade visual — Papo de Fã
+   Paleta oficial + tipografia editorial (Playfair Display / Inter /
+   JetBrains Mono). Definido no formato "CSS-first" do Tailwind v4.
+------------------------------------------------------------------ */
+
+@theme {
+  --color-wine: #940501;
+  --color-sand: #f5e5d6;
+  --color-navy: #073147;
+  --color-pink: #ee849e;
+  --color-lilac: #b080ee;
+  --color-orange: #ff6d3a;
+  --color-teal: #108c8c;
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-body: var(--font-inter), "Inter", "Open Sans", system-ui, sans-serif;
+  --font-mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, monospace;
+
+  --tracking-label: 0.14em;
+}
+
+:root {
+  --background: var(--color-sand);
+  --foreground: var(--color-ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.font-label {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* Linha editorial fina, usada como separador/assinatura gráfica */
+.rule {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.18;
+}
+
+/* Scrollbar discreta para a timeline/webstorie horizontais */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-ink) 25%, transparent);
+  border-radius: 999px;
+}
+
+/* Conteúdo rico vindo do editor do painel administrativo */
+.prose-editorial {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+.prose-editorial p {
+  margin-bottom: 1.1em;
+}
+.prose-editorial h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin: 1.4em 0 0.6em;
+}
+.prose-editorial h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 1.2em 0 0.5em;
+}
+.prose-editorial a {
+  color: var(--color-wine);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-editorial blockquote {
+  border-left: 3px solid var(--color-orange);
+  padding-left: 1rem;
+  font-style: italic;
+  color: color-mix(in srgb, var(--color-ink) 75%, transparent);
+  margin: 1.5em 0;
+}
+.prose-editorial ul, .prose-editorial ol {
+  margin: 0 0 1.1em 1.4em;
+}
+.prose-editorial ul {
+  list-style: disc;
+}
+.prose-editorial ol {
+  list-style: decimal;
+}
+.prose-editorial img {
+  border-radius: 0.25rem;
+  margin: 1.5em 0;
+}
+
+@keyframes story-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

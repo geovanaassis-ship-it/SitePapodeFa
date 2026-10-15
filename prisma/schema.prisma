@@ -1,0 +1,119 @@
+// Schema do banco de dados do site "Papo de Fã".
+// Por padrão usa SQLite (arquivo local, zero configuração).
+// Para produção, troque o "provider" para "postgresql" e defina DATABASE_URL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Usuários que podem entrar no painel administrativo.
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// Configurações globais do site: identidade, textos institucionais, redes sociais.
+model SiteSettings {
+  id            String   @id @default("singleton")
+  siteName      String   @default("Papo de Fã")
+  shortName     String   @default("Papo de Fã")
+  tagline       String   @default("Histórias de quem vive a cultura fandom.")
+  heroTitle     String   @default("Papo de Fã")
+  heroSubtitle  String   @default("Um projeto editorial sobre afeto, identidade e comunidade dentro do universo dos fandoms.")
+  heroImage     String?
+  logoUrl       String?
+  introTitle    String   @default("Sobre o projeto")
+  introText     String   @default("Reportagem multimídia que investiga como fãs constroem redes de pertencimento, criatividade e resistência a partir daquilo que amam.")
+  aboutText     String   @default("Somos um grupo de estudantes e pesquisadores interessados em entender a cultura fandom a partir de histórias reais.")
+  footerText    String   @default("Um projeto editorial universitário sobre cultura fandom.")
+  contactEmail  String?
+  instagramUrl  String?
+  youtubeUrl    String?
+  spotifyUrl    String?
+  tiktokUrl     String?
+  updatedAt     DateTime @updatedAt
+}
+
+/// As seis páginas de conteúdo variável do menu: Perfil 1/2, Vídeo 1/2, Áudio 1/2.
+/// O "slug" é fixo (identifica a rota), mas o "label" exibido no menu pode ser editado.
+model SectionPage {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  kind        String
+  label       String
+  category    String?
+  title       String
+  subtitle    String?
+  excerpt     String?
+  coverImage  String?
+  body        String?
+  mediaUrl    String?
+  mediaType   String?
+  published   Boolean   @default(true)
+  publishedAt DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+/// Eventos da Linha do Tempo.
+model TimelineEvent {
+  id          String   @id @default(cuid())
+  eventDate   DateTime
+  title       String
+  description String?
+  imageUrl    String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Pontos do Mapa Interativo.
+model MapPoint {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  lat         Float
+  lng         Float
+  imageUrl    String?
+  category    String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Slides do Webstorie (narrativa em tela cheia, estilo "stories").
+model WebstorieSlide {
+  id        String   @id @default(cuid())
+  order     Int      @default(0)
+  mediaUrl  String
+  mediaType String   @default("IMAGE")
+  title     String?
+  text      String?
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Integrantes da equipe, exibidos em "Sobre Nós".
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String?
+  photoUrl  String?
+  bio       String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
