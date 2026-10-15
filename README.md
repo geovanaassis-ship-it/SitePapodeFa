@@ -22,9 +22,13 @@ Construído com Next.js (App Router), Prisma e NextAuth.
 
 ## Primeiros passos (desenvolvimento local)
 
+O projeto usa Postgres (mesmo provedor usado em produção). Aponte `DATABASE_URL`, em `.env`,
+para um Postgres acessível (local via Docker, ou a mesma connection string do banco de
+produção — tudo bem para um projeto pequeno como este).
+
 ```bash
 npm install
-npm run db:migrate   # cria o banco local (SQLite) e aplica o schema
+npm run db:migrate   # aplica o schema no banco apontado por DATABASE_URL
 npm run db:seed       # popula com um usuário admin e conteúdo de exemplo
 npm run dev
 ```
@@ -84,8 +88,7 @@ wordmark de texto como substituto, para não quebrar o layout.
 ## Estrutura do projeto
 
 ```
-prisma/schema.prisma        Modelo de dados (SQLite em dev; troque o provider para
-                             "postgresql" em produção)
+prisma/schema.prisma        Modelo de dados (Postgres)
 prisma/seed.ts               Conteúdo inicial de exemplo
 src/app/(site)/...           Páginas públicas
 src/app/admin/...            Painel administrativo (login + área protegida)
@@ -97,13 +100,15 @@ src/lib/upload.ts             Upload de arquivos enviados pelo painel
 
 ## Produção / deploy
 
-- **Banco de dados:** o projeto usa SQLite por padrão (zero configuração). Para produção,
-  troque `provider = "sqlite"` para `"postgresql"` em `prisma/schema.prisma`, aponte
-  `DATABASE_URL` para um banco gerenciado (ex.: Neon, Supabase, Railway) e rode
-  `npx prisma migrate deploy`.
-- **Arquivos enviados pelo painel** (logo, imagens, vídeos, áudios) são salvos em
-  `public/uploads`. Em plataformas serverless (ex. Vercel) o sistema de arquivos é efêmero —
-  para produção real, troque `src/lib/upload.ts` por um upload para um storage externo
-  (Vercel Blob, S3, Cloudinary etc.), mantendo a mesma assinatura da função.
-- **Variáveis de ambiente:** veja `.env.example`. `AUTH_SECRET` deve ser trocado por um valor
-  aleatório forte (`openssl rand -base64 32`) em produção.
+O projeto já está publicado na Vercel (projeto `papo-de-fa`), conectado a este repositório —
+todo push nesta branch gera um novo deploy automaticamente.
+
+- **Banco de dados:** Postgres. O deploy roda `prisma migrate deploy` automaticamente antes do
+  build (configurado no "Build Command" do projeto na Vercel), então novas migrations criadas
+  localmente (`npx prisma migrate dev`) são aplicadas sozinhas a cada push.
+- **Arquivos enviados pelo painel** (logo, imagens, vídeos, áudios): em produção, `src/lib/upload.ts`
+  detecta a variável `BLOB_READ_WRITE_TOKEN` (injetada automaticamente pela Vercel quando um
+  Blob Store está conectado ao projeto) e envia os arquivos para o Vercel Blob. Em
+  desenvolvimento local, sem essa variável, os arquivos vão para `public/uploads`.
+- **Variáveis de ambiente:** veja `.env.example`. `AUTH_SECRET` já está configurado na Vercel
+  com um valor aleatório forte — gere um novo com `openssl rand -base64 32` caso precise trocar.

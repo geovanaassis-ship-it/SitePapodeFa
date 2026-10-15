@@ -1,6 +1,7 @@
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
+import { put } from "@vercel/blob";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
@@ -21,12 +22,13 @@ const ALLOWED_TYPES = new Set([
 
 /**
  * Salva um arquivo enviado via <input type="file"> (recebido numa Server
- * Action como FormData) em /public/uploads e retorna o caminho público.
+ * Action como FormData) e retorna o caminho/URL pública.
  *
- * Observação para produção: em plataformas serverless (ex. Vercel) o
- * sistema de arquivos é efêmero — para um projeto em produção com tráfego
- * real, troque esta função por um upload para um storage externo
- * (Vercel Blob, S3, Cloudinary etc.), mantendo a mesma assinatura.
+ * Em produção (quando BLOB_READ_WRITE_TOKEN está definido, ex. na Vercel com
+ * um Blob Store conectado ao projeto), o arquivo vai para o Vercel Blob.
+ * Em desenvolvimento local, cai para disco em /public/uploads — o sistema de
+ * arquivos de plataformas serverless é efêmero, então esse caminho não deve
+ * ser usado em produção.
  */
 export async function saveUploadedFile(file: File): Promise<string | null> {
   if (!file || file.size === 0) return null;
@@ -34,12 +36,19 @@ export async function saveUploadedFile(file: File): Promise<string | null> {
     throw new Error(`Tipo de arquivo não suportado: ${file.type || "desconhecido"}`);
   }
 
-  await mkdir(UPLOAD_DIR, { recursive: true });
-
   const ext = path.extname(file.name) || guessExtension(file.type);
   const filename = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
 
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(filename, file, {
+      access: "public",
+      addRandomSuffix: false,
+    });
+    return blob.url;
+  }
+
+  await mkdir(UPLOAD_DIR, { recursive: true });
+  const buffer = Buffer.from(await file.arrayBuffer());
   await writeFile(path.join(UPLOAD_DIR, filename), buffer);
 
   return `/uploads/${filename}`;

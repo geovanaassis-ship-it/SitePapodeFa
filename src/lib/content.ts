@@ -18,16 +18,23 @@ const DEFAULT_SETTINGS = {
   youtubeUrl: null,
   spotifyUrl: null,
   tiktokUrl: null,
+  updatedAt: new Date(),
 };
 
 export async function getSiteSettings() {
-  const settings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
-  if (settings) return settings;
-  return prisma.siteSettings.upsert({
-    where: { id: "singleton" },
-    update: {},
-    create: DEFAULT_SETTINGS,
-  });
+  try {
+    const settings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
+    if (settings) return settings;
+    return await prisma.siteSettings.upsert({
+      where: { id: "singleton" },
+      update: {},
+      create: DEFAULT_SETTINGS,
+    });
+  } catch {
+    // Banco indisponível (ex.: build sem acesso ao banco de produção) — usa
+    // valores padrão para não derrubar a geração de metadados/páginas.
+    return DEFAULT_SETTINGS;
+  }
 }
 
 export const SECTION_DEFS = [
