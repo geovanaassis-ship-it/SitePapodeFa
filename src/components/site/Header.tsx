@@ -67,7 +67,7 @@ export function Header({
                   <Link
                     key={item.slug}
                     href={`/${item.slug}`}
-                    className="block rounded-lg px-3 py-2 font-body text-sm hover:bg-sand"
+                    className="font-label block rounded-lg px-3 py-2 text-[11px] hover:bg-sand"
                   >
                     {item.label}
                   </Link>
@@ -104,7 +104,7 @@ export function Header({
 
       {open && (
         <div className="max-h-[80vh] overflow-y-auto border-t border-ink/10 bg-sand px-5 pb-8 pt-2 lg:hidden">
-          <Link href="/" className="block py-3 font-display text-lg">
+          <Link href="/" className="font-label block py-3 text-[13px]">
             Início
           </Link>
           {groups.map((group) => (
@@ -112,7 +112,7 @@ export function Header({
               <p className="font-label mb-2 text-[11px] text-ink/60">{group.label}</p>
               <div className="flex flex-col gap-2">
                 {group.items.map((item) => (
-                  <Link key={item.slug} href={`/${item.slug}`} className="font-display text-lg">
+                  <Link key={item.slug} href={`/${item.slug}`} className="font-label text-[13px]">
                     {item.label}
                   </Link>
                 ))}
@@ -122,7 +122,7 @@ export function Header({
           <div className="border-t border-ink/10 py-3">
             <div className="flex flex-col gap-2">
               {singleLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="font-display text-lg">
+                <Link key={link.href} href={link.href} className="font-label text-[13px]">
                   {link.label}
                 </Link>
               ))}
