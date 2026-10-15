@@ -1,14 +1,18 @@
-// Schema do banco de dados do site "Papo de Fã".
-// Por padrão usa SQLite (arquivo local, zero configuração).
-// Para produção, troque o "provider" para "postgresql" e defina DATABASE_URL.
+// Schema do banco de dados do site "Papo de Fã" (Postgres).
+//
+// url: conexão pooled, usada em runtime pela aplicação.
+// directUrl: conexão direta (sem pgbouncer), usada apenas pelo Prisma Migrate
+// para rodar DDL — necessária com provedores como o Neon, cuja URL padrão é
+// pooled e não suporta bem comandos de migração.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 /// Usuários que podem entrar no painel administrativo.
