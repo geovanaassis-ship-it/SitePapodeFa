@@ -37,42 +37,136 @@ async function main() {
     },
   });
 
-  // Atualização pontual: fotos dos eventos da Linha do Tempo — remover depois de aplicado.
+  // Atualização pontual e definitiva da Linha do Tempo (texto + fotos) — remover depois de aplicado.
   {
-    const timelinePhotos: { order: number; file: string }[] = [
-      { order: 1, file: "01-lisztomania.png" },
-      { order: 2, file: "02-palavra-fa.png" },
-      { order: 3, file: "03-comunidades-literarias.png" },
-      { order: 4, file: "04-palavra-fandom.png" },
-      { order: 5, file: "05-ficcao-cientifica.png" },
-      { order: 6, file: "06-discos-radio-tv.png" },
-      { order: 7, file: "07-cultura-geek.png" },
-      { order: 8, file: "08-games-locadoras-rock.png" },
-      { order: 9, file: "09-fas-internet.png" },
-      { order: 10, file: "10-divas-pop-orkut.png" },
-      { order: 11, file: "11-redes-sociais.png" },
-      { order: 12, file: "12-pandemia-kpop.png" },
+    const historicalEvents: {
+      order: number;
+      eventDate: Date;
+      title: string;
+      description: string;
+      photoFile: string;
+    }[] = [
+      {
+        order: 1,
+        eventDate: new Date("1844-01-01"),
+        title: "Lisztomania",
+        description:
+          "O pianista Liszt provoca desmaios e disputas por mechas de cabelo nos EUA. Heine cria o termo em 1840, quando \"mania\" ainda era diagnóstico médico.",
+        photoFile: "01-lisztomania.png",
+      },
+      {
+        order: 2,
+        eventDate: new Date("1885-01-01"),
+        title: "Onde a palavra \"fã\" aparece",
+        description:
+          "No beisebol, a imprensa troca cranks e fiends e começa a chamar por fan, abreviação de fanatic. O registro impresso mais antigo é de 1885, em um jornal de Kansas City.",
+        photoFile: "02-palavra-fa.png",
+      },
+      {
+        order: 3,
+        eventDate: new Date("1887-01-01"),
+        title: "Comunidades literárias",
+        description:
+          "Leitores de Sherlock Holmes se reúnem para discutir teorias. Quando Doyle matou o detetive em 1893, a pressão dos fãs o obrigou a ressuscitar o personagem em 1903.",
+        photoFile: "03-comunidades-literarias.png",
+      },
+      {
+        order: 4,
+        eventDate: new Date("1903-06-01"),
+        title: "Onde a palavra \"fandom\" aparece",
+        description:
+          "Surge na imprensa, de novo, no beisebol: \"fan\" + \"dom\" de kingdom, em tradução literal, \"reino dos fãs\". Fã deixou de ser indivíduo e virou coletivo.",
+        photoFile: "04-palavra-fandom.png",
+      },
+      {
+        order: 5,
+        eventDate: new Date("1920-01-01"),
+        title: "Ficção científica e fanzines",
+        description:
+          "A revista Amazing Stories cria seções de cartas e aproxima os leitores. Em 1930 sai o The Comet, um dos primeiros fanzines registrados na história.",
+        photoFile: "05-ficcao-cientifica.png",
+      },
+      {
+        order: 6,
+        eventDate: new Date("1960-01-01"),
+        title: "Discos, rádio e TV",
+        description:
+          "A Beatlemania consolida-se como o primeiro grande fenômeno de fãs, populariza shows em estádios e clipes. No Brasil, a Jovem Guarda e o Tropicalismo ligam música a identidade.",
+        photoFile: "06-discos-radio-tv.png",
+      },
+      {
+        order: 7,
+        eventDate: new Date("1966-01-01"),
+        title: "Cultura geek",
+        description:
+          "Star Trek conquista uma legião de fãs e cerca de 100 mil cartas salvam a série do cancelamento. Fanfics, cosplay e colecionismo marcam o início da cultura geek, e em 1972 surge a primeira convenção.",
+        photoFile: "07-cultura-geek.png",
+      },
+      {
+        order: 8,
+        eventDate: new Date("1980-01-01"),
+        title: "Games, locadoras e rock",
+        description:
+          "Star Wars, quadrinhos, animes e fliperamas expandem a cultura geek. Em 1981, surge no Brasil a Rock Brigade, fã-clube que virou uma revista especializada no gênero.",
+        photoFile: "08-games-locadoras-rock.png",
+      },
+      {
+        order: 9,
+        eventDate: new Date("1990-01-01"),
+        title: "Os fãs chegam à internet",
+        description:
+          "Fóruns, listas de e-mail, Yahoo! Groups e o FanFiction.Net viralizam na internet. A MTV chega ao Brasil, os videoclipes bombam e começa a era das boybands.",
+        photoFile: "09-fas-internet.png",
+      },
+      {
+        order: 10,
+        eventDate: new Date("2000-01-01"),
+        title: "Divas pop, emocore e Orkut",
+        description:
+          "Divas pop entram em alta, sendo Britney Spears o maior nome da época. Anos depois, o emocore domina o estilo dos adolescentes, e os fandoms se reúnem em comunidades no Orkut.",
+        photoFile: "10-divas-pop-orkut.png",
+      },
+      {
+        order: 11,
+        eventDate: new Date("2010-01-01"),
+        title: "Redes sociais e mobilização",
+        description:
+          "Twitter, Tumblr, Instagram e YouTube ampliam a produção dos fãs. Fandoms como os de One Direction, Harry Potter e Marvel organizam mutirões, hashtags e votações.",
+        photoFile: "11-redes-sociais.png",
+      },
+      {
+        order: 12,
+        eventDate: new Date("2020-01-01"),
+        title: "Pandemia, ativismo e K-pop",
+        description:
+          "Com shows suspensos, tudo migrou para o TikTok, Discord e Twitter. BTS, BLACKPINK e Stray Kids consolidam fandoms globais que organizam campanhas e ações sociais.",
+        photoFile: "12-pandemia-kpop.png",
+      },
     ];
 
-    for (const photo of timelinePhotos) {
-      const filePath = path.join(process.cwd(), "prisma", "assets", "linha-do-tempo", photo.file);
+    await prisma.timelineEvent.deleteMany({});
+
+    for (const event of historicalEvents) {
+      const filePath = path.join(process.cwd(), "prisma", "assets", "linha-do-tempo", event.photoFile);
       const buffer = await readFile(filePath);
-      const blob = await put(`linha-do-tempo/${photo.file}`, buffer, {
+      const blob = await put(`linha-do-tempo/${event.photoFile}`, buffer, {
         access: "public",
         addRandomSuffix: true,
         contentType: "image/png",
       });
 
-      const { count } = await prisma.timelineEvent.updateMany({
-        where: { order: photo.order },
-        data: { imageUrl: blob.url },
+      await prisma.timelineEvent.create({
+        data: {
+          order: event.order,
+          eventDate: event.eventDate,
+          title: event.title,
+          description: event.description,
+          imageUrl: blob.url,
+          published: true,
+        },
       });
 
-      console.log(
-        count > 0
-          ? `Imagem do evento #${photo.order} atualizada: ${blob.url}`
-          : `Nenhum evento com order=${photo.order} encontrado — imagem não aplicada (importe a linha do tempo histórica no painel primeiro).`,
-      );
+      console.log(`Evento #${event.order} recriado com foto: ${blob.url}`);
     }
   }
 
@@ -213,39 +307,6 @@ async function main() {
     },
   });
 
-  const timelineEvents = [
-    {
-      eventDate: new Date("2023-03-01"),
-      title: "Início da pesquisa",
-      description: "Primeiros contatos com comunidades de fãs e levantamento bibliográfico sobre cultura fandom.",
-      order: 1,
-    },
-    {
-      eventDate: new Date("2023-08-15"),
-      title: "Primeiras entrevistas",
-      description: "Rodada inicial de entrevistas com fãs-criadores, colecionadores e organizadores de eventos.",
-      order: 2,
-    },
-    {
-      eventDate: new Date("2024-01-20"),
-      title: "Cobertura de convenção",
-      description: "Registro em campo de uma convenção de fãs, com captação de vídeo, áudio e fotografia.",
-      order: 3,
-    },
-    {
-      eventDate: new Date("2024-06-10"),
-      title: "Publicação do projeto",
-      description: "Lançamento deste site reunindo perfis, vídeos, áudios, linha do tempo e mapa interativo.",
-      order: 4,
-    },
-  ];
-
-  for (const event of timelineEvents) {
-    const existing = await prisma.timelineEvent.findFirst({ where: { title: event.title } });
-    if (!existing) {
-      await prisma.timelineEvent.create({ data: event });
-    }
-  }
 
   const mapPoints = [
     {
