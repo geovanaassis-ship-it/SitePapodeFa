@@ -334,16 +334,29 @@ async function main() {
     }
   }
 
-  const slides = [
-    { order: 1, mediaType: "IMAGE", mediaUrl: "", title: "Capa", text: "Edite os slides do Webstorie no painel administrativo." },
-    { order: 2, mediaType: "IMAGE", mediaUrl: "", title: "Capítulo 1", text: "Cada slide pode ter uma imagem e um texto curto." },
-    { order: 3, mediaType: "IMAGE", mediaUrl: "", title: "Capítulo 2", text: "Adicione quantos slides quiser." },
-  ];
+  // Remove slides de exemplo que porventura tenham sido recriados por
+  // execuções anteriores deste seed (bloco antigo removido).
+  await prisma.webstorieSlide.deleteMany({
+    where: { title: { in: ["Capa", "Capítulo 1", "Capítulo 2"] } },
+  });
 
-  for (const slide of slides) {
-    const existing = await prisma.webstorieSlide.findFirst({ where: { title: slide.title } });
-    if (!existing) {
-      await prisma.webstorieSlide.create({ data: slide });
+  // Atualização pontual: novo slide de vídeo no Webstorie — remover depois de aplicado.
+  {
+    const existingVideo = await prisma.webstorieSlide.findFirst({
+      where: { mediaType: "VIDEO", order: 7 },
+    });
+    if (!existingVideo) {
+      const filePath = path.join(process.cwd(), "prisma", "assets", "webstorie", "07-video-novo.mp4");
+      const buffer = await readFile(filePath);
+      const blob = await put("webstorie/07-video-novo.mp4", buffer, {
+        access: "public",
+        addRandomSuffix: true,
+        contentType: "video/mp4",
+      });
+      await prisma.webstorieSlide.create({
+        data: { order: 7, mediaType: "VIDEO", mediaUrl: blob.url, published: true },
+      });
+      console.log(`Novo slide de vídeo do Webstorie criado: ${blob.url}`);
     }
   }
 
