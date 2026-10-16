@@ -76,7 +76,7 @@ export default async function HomePage() {
       <section className="mx-auto max-w-5xl px-5 py-20 sm:px-8">
         <SectionHeading eyebrow="Apresentação" title={settings.introTitle} align="center" />
         <div
-          className="prose-apresentacao mx-auto mt-6 max-w-3xl text-center text-lg leading-relaxed text-ink/75"
+          className="prose-editorial mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-ink/75"
           dangerouslySetInnerHTML={{ __html: introHtml }}
         />
         <div className="mt-10 flex justify-center">

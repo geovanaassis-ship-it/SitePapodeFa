@@ -54,10 +54,21 @@ export function SectionPageView({ section }: { section: Section }) {
 
       {section.body && (
         <div className="mx-auto max-w-2xl px-5 py-14 sm:px-8">
-          <div
-            className="prose-editorial"
-            dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(section.body) }}
-          />
+          {section.kind === "PERFIL" ? (
+            <div className="rounded-2xl border border-ink/15 bg-paper p-8 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.18)] sm:p-12">
+              <h2 className="font-display text-2xl font-bold sm:text-3xl">{section.title}</h2>
+              <div className="rule mt-4 w-16" />
+              <div
+                className="prose-editorial mt-6"
+                dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(section.body) }}
+              />
+            </div>
+          ) : (
+            <div
+              className="prose-editorial"
+              dangerouslySetInnerHTML={{ __html: simpleMarkdownToHtml(section.body) }}
+            />
+          )}
         </div>
       )}
     </article>

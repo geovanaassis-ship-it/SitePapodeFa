@@ -2,20 +2,23 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { getSiteSettings, getTeamMembers } from "@/lib/content";
 import { SectionHeading } from "@/components/site/SectionHeading";
+import { simpleMarkdownToHtml } from "@/lib/markdown";
 
 export const metadata: Metadata = { title: "Sobre Nós" };
 
 export default async function SobreNosPage() {
   const [settings, team] = await Promise.all([getSiteSettings(), getTeamMembers()]);
+  const aboutHtml = simpleMarkdownToHtml(settings.aboutText);
 
   return (
     <div>
       <section className="bg-navy py-20 text-paper">
         <div className="mx-auto max-w-3xl px-5 text-center sm:px-8">
           <SectionHeading eyebrow="Quem faz" title="Sobre Nós" align="center" light />
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-paper/80">
-            {settings.aboutText}
-          </p>
+          <div
+            className="prose-editorial prose-editorial--light mx-auto mt-6 max-w-2xl text-lg leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: aboutHtml }}
+          />
         </div>
       </section>
 
@@ -43,9 +46,11 @@ export default async function SobreNosPage() {
                     </div>
                   )}
                 </div>
-                <h3 className="mt-4 font-display text-xl">{member.name}</h3>
+                <h3 className="mt-4 font-display text-xl font-bold">{member.name}</h3>
                 {member.role && <p className="font-label mt-1 text-[11px] text-wine">{member.role}</p>}
-                {member.bio && <p className="mt-3 text-sm leading-relaxed text-ink/70">{member.bio}</p>}
+                {member.bio && (
+                  <p className="mt-3 text-justify text-sm leading-relaxed text-ink/70">{member.bio}</p>
+                )}
               </div>
             ))}
           </div>

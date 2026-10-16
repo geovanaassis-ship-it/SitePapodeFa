@@ -31,7 +31,7 @@ export default async function MapaPage() {
         />
 
         <div
-          className="prose-mapa mt-8 space-y-4 text-ink/75"
+          className="prose-editorial mt-8 text-ink/75"
           dangerouslySetInnerHTML={{ __html: introHtml }}
         />
       </div>

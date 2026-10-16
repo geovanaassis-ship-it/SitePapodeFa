@@ -76,15 +76,19 @@ h1, h2, h3, h4, .font-display {
 }
 .prose-editorial p {
   margin-bottom: 1.1em;
+  text-align: justify;
+  text-justify: inter-word;
 }
 .prose-editorial h2 {
   font-family: var(--font-display);
   font-size: 1.6rem;
+  font-weight: 700;
   margin: 1.4em 0 0.6em;
 }
 .prose-editorial h3 {
   font-family: var(--font-display);
   font-size: 1.25rem;
+  font-weight: 700;
   margin: 1.2em 0 0.5em;
 }
 .prose-editorial a {
@@ -111,6 +115,12 @@ h1, h2, h3, h4, .font-display {
 .prose-editorial img {
   border-radius: 0.25rem;
   margin: 1.5em 0;
+}
+.prose-editorial--light {
+  color: color-mix(in srgb, var(--color-paper) 80%, transparent);
+}
+.prose-editorial--light a {
+  color: var(--color-paper);
 }
 
 @keyframes story-progress {

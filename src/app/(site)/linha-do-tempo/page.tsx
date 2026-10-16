@@ -18,7 +18,7 @@ export default async function TimelinePage() {
       />
 
       <div className="mt-8 max-w-2xl space-y-4 text-ink/75 leading-relaxed">
-        <p>
+        <p className="text-justify">
           Com o avanço da tecnologia e da internet, o fandom se consolidou em comunidades digitais,
           mas o fenômeno de se tornar fã de algo ou alguém é muito mais antigo do que parece. Desde o
           século XIX, quando plateias inteiras desmaiavam diante de um pianista, até os fandoms
@@ -43,7 +43,9 @@ export default async function TimelinePage() {
               </p>
               <h2 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{event.title}</h2>
               {event.description && (
-                <p className="mt-3 max-w-2xl text-ink/70 leading-relaxed">{event.description}</p>
+                <p className="mt-3 max-w-2xl text-justify text-ink/70 leading-relaxed">
+                  {event.description}
+                </p>
               )}
               {event.imageUrl && (
                 <div className="relative mt-5 aspect-[16/9] w-full max-w-xl overflow-hidden rounded-xl">

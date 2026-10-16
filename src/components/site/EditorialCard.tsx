@@ -52,7 +52,7 @@ export function EditorialCard({
       </div>
       <div className="flex flex-1 flex-col gap-2 p-5">
         <h3
-          className={`font-display leading-tight ${
+          className={`font-display font-bold leading-tight ${
             size === "lg" ? "text-2xl sm:text-3xl" : "text-lg"
           }`}
         >
