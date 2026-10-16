@@ -3,15 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { saveUploadedFile } from "@/lib/upload";
 
 function str(formData: FormData, key: string): string {
   return String(formData.get(key) ?? "").trim();
 }
 
-async function buildData(formData: FormData, existingMedia?: string | null) {
-  const mediaFile = formData.get("mediaUrl") as File | null;
-  const mediaUrl = (mediaFile && mediaFile.size > 0 ? await saveUploadedFile(mediaFile) : existingMedia) ?? "";
+function buildData(formData: FormData, existingMedia?: string | null) {
+  const mediaUrl = str(formData, "mediaUrl") || existingMedia || "";
 
   return {
     order: Number(str(formData, "order") || 0),
@@ -24,7 +22,7 @@ async function buildData(formData: FormData, existingMedia?: string | null) {
 }
 
 export async function createSlideAction(formData: FormData) {
-  const data = await buildData(formData);
+  const data = buildData(formData);
   await prisma.webstorieSlide.create({ data });
   revalidatePath("/", "layout");
   revalidatePath("/webstorie");
@@ -34,7 +32,7 @@ export async function createSlideAction(formData: FormData) {
 
 export async function updateSlideAction(id: string, formData: FormData) {
   const existing = await prisma.webstorieSlide.findUnique({ where: { id } });
-  const data = await buildData(formData, existing?.mediaUrl);
+  const data = buildData(formData, existing?.mediaUrl);
   await prisma.webstorieSlide.update({ where: { id }, data });
   revalidatePath("/", "layout");
   revalidatePath("/webstorie");

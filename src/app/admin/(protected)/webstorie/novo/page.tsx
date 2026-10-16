@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FieldGroup, TextInput, TextArea, Select, Checkbox } from "@/components/admin/Field";
 import { SubmitButton } from "@/components/admin/SubmitButton";
+import { WebstorieMediaUpload } from "@/components/admin/WebstorieMediaUpload";
 import { createSlideAction } from "../actions";
 
 export default function NewSlidePage() {
@@ -23,8 +24,8 @@ export default function NewSlidePage() {
             <option value="VIDEO">Vídeo</option>
           </Select>
         </FieldGroup>
-        <FieldGroup label="Arquivo">
-          <input type="file" name="mediaUrl" accept="image/*,video/*" required className="w-full text-sm" />
+        <FieldGroup label="Arquivo" hint="Imagens e vídeos são aceitos, incluindo arquivos grandes.">
+          <WebstorieMediaUpload />
         </FieldGroup>
         <FieldGroup label="Título (opcional)">
           <TextInput name="title" />

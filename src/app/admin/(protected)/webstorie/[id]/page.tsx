@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { FieldGroup, TextInput, TextArea, Select, Checkbox } from "@/components/admin/Field";
 import { SubmitButton } from "@/components/admin/SubmitButton";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { WebstorieMediaUpload } from "@/components/admin/WebstorieMediaUpload";
 import { updateSlideAction, deleteSlideAction } from "../actions";
 
 export default async function EditSlidePage({ params }: { params: Promise<{ id: string }> }) {
@@ -34,7 +35,7 @@ export default async function EditSlidePage({ params }: { params: Promise<{ id: 
           </Select>
         </FieldGroup>
         <FieldGroup label="Arquivo" hint="Envie um novo arquivo para substituir o atual.">
-          <input type="file" name="mediaUrl" accept="image/*,video/*" className="w-full text-sm" />
+          <WebstorieMediaUpload currentUrl={slide.mediaUrl} />
         </FieldGroup>
         <FieldGroup label="Título (opcional)">
           <TextInput name="title" defaultValue={slide.title ?? ""} />
