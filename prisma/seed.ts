@@ -360,6 +360,54 @@ async function main() {
     }
   }
 
+  // Atualização pontual: novos termos do Dicionário de Fãs (Webstorie) — remover depois de aplicado.
+  {
+    const newTerms: { order: number; file: string; title: string; text: string }[] = [
+      {
+        order: 8,
+        file: "08-stan.webp",
+        title: "Stan",
+        text: "Junção das palavras Stalker e Fan. Antes, descrevia um fã obcecado, extremista e muitas vezes agressivo com quem criticava seu ídolo. Ao longo do tempo, passou a descrever um fã dedicado que acompanha, engaja e defende um grupo ou artista (de forma saudável). O termo surgiu na música \"Stan\", do rapper Eminem, em 2000.",
+      },
+      {
+        order: 9,
+        file: "09-shifting.webp",
+        title: "Shifting",
+        text: "Prática em que o fã tenta \"entrar\" em um sonho super realista, imaginando viver em uma realidade desejada. O termo viralizou na pandemia e já ultrapassou 1,8 bilhão de visualizações no TikTok.",
+      },
+      {
+        order: 10,
+        file: "10-parassocialidade.webp",
+        title: "Parassocialidade",
+        text: "Relação de apenas um dos lados, em que o fã sente uma amizade íntima e recíproca com seu ídolo, que nem sabe da sua existência. O conceito foi criado em 1956 pelos pesquisadores Donald Horton e Richard Wohl, mas explodiu com o avanço das redes sociais. Em 2025, o termo foi eleito \"palavra do ano\" pelo dicionário de Cambridge.",
+      },
+    ];
+
+    for (const term of newTerms) {
+      const existingTerm = await prisma.webstorieSlide.findFirst({ where: { title: term.title } });
+      if (!existingTerm) {
+        const filePath = path.join(process.cwd(), "prisma", "assets", "webstorie", term.file);
+        const buffer = await readFile(filePath);
+        const blob = await put(`webstorie/${term.file}`, buffer, {
+          access: "public",
+          addRandomSuffix: true,
+          contentType: "image/webp",
+        });
+        await prisma.webstorieSlide.create({
+          data: {
+            order: term.order,
+            mediaType: "IMAGE",
+            mediaUrl: blob.url,
+            title: term.title,
+            text: term.text,
+            published: true,
+          },
+        });
+        console.log(`Novo termo do Webstorie criado: ${term.title} (${blob.url})`);
+      }
+    }
+  }
+
   const team = [
     { name: "Nome da Integrante", role: "Reportagem e edição", order: 1 },
     { name: "Nome do Integrante", role: "Produção audiovisual", order: 2 },
