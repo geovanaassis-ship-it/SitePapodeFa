@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { saveUploadedFile } from "@/lib/upload";
 import { SECTION_DEFS } from "@/lib/content";
+import { toEmbedUrl } from "@/lib/embed";
 
 function str(formData: FormData, key: string): string {
   return String(formData.get(key) ?? "").trim();
@@ -24,7 +25,8 @@ export async function updateSectionAction(slug: string, formData: FormData) {
   let mediaUrl = existing?.mediaUrl ?? null;
 
   if (mediaType === "EMBED") {
-    mediaUrl = str(formData, "mediaUrlEmbed") || null;
+    const rawEmbed = str(formData, "mediaUrlEmbed");
+    mediaUrl = rawEmbed ? toEmbedUrl(rawEmbed) : null;
   } else if (mediaType === "UPLOAD") {
     const mediaFile = formData.get("mediaFile") as File | null;
     mediaUrl = mediaFile && mediaFile.size > 0 ? await saveUploadedFile(mediaFile) : existing?.mediaUrl ?? null;

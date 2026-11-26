@@ -408,6 +408,44 @@ async function main() {
     }
   }
 
+  // Atualização pontual: links de embed (Vídeo 1, Áudio 1, Áudio 2) — remover depois de aplicado.
+  {
+    const mediaUpdates = [
+      { slug: "video-1", mediaUrl: "https://www.youtube.com/embed/PwSed4qSFnA" },
+      { slug: "audio-1", mediaUrl: "https://open.spotify.com/embed/episode/3f0tftf0ZiJN7urWpEq6Jk" },
+      { slug: "audio-2", mediaUrl: "https://open.spotify.com/embed/episode/0FCjQKXDCfvBEfrIvPeZaX" },
+    ];
+    for (const update of mediaUpdates) {
+      await prisma.sectionPage.updateMany({
+        where: { slug: update.slug },
+        data: { mediaType: "EMBED", mediaUrl: update.mediaUrl },
+      });
+      console.log(`Link de embed atualizado: ${update.slug} -> ${update.mediaUrl}`);
+    }
+  }
+
+  // Atualização pontual: negrito + maiúsculo em frases do texto da home — remover depois de aplicado.
+  {
+    const currentSettings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
+    if (currentSettings?.introText) {
+      const phrasesToEmphasize = ["Fandom no Brasil", "Na Era Digital"];
+      let updatedIntroText = currentSettings.introText;
+      for (const phrase of phrasesToEmphasize) {
+        const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+        updatedIntroText = updatedIntroText.replace(regex, (match) => `**${match.toUpperCase()}**`);
+      }
+      if (updatedIntroText !== currentSettings.introText) {
+        await prisma.siteSettings.update({
+          where: { id: "singleton" },
+          data: { introText: updatedIntroText },
+        });
+        console.log("Texto da home atualizado com negrito/maiúsculo nas frases solicitadas.");
+      } else {
+        console.log("Frases para negrito/maiúsculo não encontradas no texto atual da home.");
+      }
+    }
+  }
+
   const team = [
     { name: "Nome da Integrante", role: "Reportagem e edição", order: 1 },
     { name: "Nome do Integrante", role: "Produção audiovisual", order: 2 },

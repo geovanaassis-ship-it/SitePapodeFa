@@ -87,7 +87,7 @@ export default async function EditSectionPage({
             </FieldGroup>
             <FieldGroup
               label="URL de incorporação (embed)"
-              hint="Ex.: https://www.youtube.com/embed/ID ou https://open.spotify.com/embed/episode/ID"
+              hint="Cole o link normal de compartilhamento do YouTube, Spotify ou Vimeo — o site converte automaticamente para o formato de incorporação."
             >
               <TextInput
                 name="mediaUrlEmbed"
